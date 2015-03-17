@@ -1,0 +1,17 @@
+# curl -i -X POST -u test:test  http://10.3.3.3:8080/http
+basedir: gateway
+port: "80:_"
+policies:
+  default_policy:
+    - access: {allow: ["127.0.0.1", "10.5.5.1", "10.3.3.1"],
+               deny: ["*"]}
+
+middlewares:
+  api:
+    pattern: "/Accounts/GetPortfolioSummary"
+    method: GET
+    enabled: true
+    policy:
+      - $default_policy
+      - cors: {AllowedOrigins: ["*"]}
+      - http_endpoint: {url: "http://10.3.3.3:8080"}

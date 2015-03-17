@@ -1,0 +1,48 @@
+# curl -i -X POST http://10.3.3.3:8080/payment
+basedir: gateway
+policies:
+  default_policy:
+    - access: {allow: ["127.0.0.1", "10.5.5.1", "10.3.3.1"], deny: ["*"]}
+
+middlewares:
+  payment_batch:
+    pattern: "/payment"
+    method: GET
+    policy:
+      - $default_policy
+      - log:  {upstream: ["HeaderNames=> ", "$message.req.headers.names", " || Origin=> ", "$message.req.header.Origin"],
+               downstream: ["response"] }
+      - cors: {AllowedOrigins: ["*"]}
+      - exec: {command: "examples/hooks/sayhi.sh"}
+
+  favicon:
+    pattern: "/favicon.ico"
+    method: GET
+    policy:
+      - static: {}
+
+  static_files:
+    pattern: "/examples/static/"
+    method: GET
+    policy:
+      - static: {}
+
+  mock_services_preflight:
+    pattern: "/Accounts/"
+    method: OPTIONS
+    policy:
+      - cors: {AllowedOrigins: ["*"]}
+      - log: {upstream: ["Origin: ", "$message.req.header.Origin", ", Headers: ", "$message.req.headers.names"],
+              downstream: [""]}
+
+  mock_services:
+    pattern: "/Accounts/"
+    method: GET
+    policy:
+       # Do the validation on behalf of the server and making sure ACAO is populated in the response, otherwise
+       # the browser will reject it
+      - cors: {AllowedOrigins: ["*"]}
+      - log: {upstream: ["Origin: ", "$message.req.header.Origin", ", Headers: ", "$message.req.headers.names"],
+              downstream: [""]}
+      - http_endpoint: {url: "http://10.3.3.3:8181"}
+

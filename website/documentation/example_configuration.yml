@@ -1,0 +1,39 @@
+base_dir: /dgw
+# "http_port: https_port" `_` if not supported
+port: "80:_"
+
+policies:
+	- default: &default_policy
+		- type: access
+		  allow: "192.168.1.0, :::1"
+		  deny: *
+
+		- type: log
+		  userdata: [user, age]
+
+		- type: basic_auth
+		  username: jteso
+		  password: secr3t
+
+
+middlewares:
+	- id: new_dgw
+	  pattern: /v2
+	  enabled: true
+	  policy:
+		*default_policy
+		- type: http_endpoint
+			url: http://microdgw.company.com
+
+	- id: legacy_dgw
+	  pattern: *
+	  enabled: true
+	  policy:
+		*default_policy
+		- rate_limit:
+			rate_ps: 10
+		- http_endpoint:
+			url: http://pdgw.company.com
+
+
+

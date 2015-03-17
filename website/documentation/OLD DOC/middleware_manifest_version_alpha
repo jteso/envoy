@@ -1,0 +1,30 @@
+NAME=AccountAPI
+VERSION=1.0
+PROTOCOLS=[http, https]
+BASE_URI=dev.api.example.com
+
+[MODULES]
+LOCAL_ACCESS_ONLY= ACCESS(allow="localhost, 127.0.0.1", deny="ALL")
+RECORD=RECORD
+
+
+[ROUTES]
+
+[ROUTE "/account"]
+DESCRIPTION=Operations related with account
+
+[GET]
+DESCRIPTION=Get basic information about an account
+POLICY=[$LOCAL_ACCESS_ONLY, $RECORD]
+ENDPOINT= MOCK_SERVER(request= \
+REQUEST= \
+
+{
+	
+}
+
+RESPONSE = 200\
+Content-Type: application/json
+{
+	//bla bla bla
+}
