@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/codegangsta/cli"
 	"os"
 	"runtime"
-	"fmt"
 )
 
 func main() {

@@ -1,7 +1,5 @@
 package analytics
 
-
-
 //type Analytics struct {
 //	DB dao.MiddlewareDB
 //}

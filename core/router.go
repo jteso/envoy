@@ -122,7 +122,7 @@ func (r *Router) LookupById(id string) (m Middleware, found bool) {
 }
 
 func (r *Router) GetAllIds() []string {
-	collectIds := make([]string,0)
+	collectIds := make([]string, 0)
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
