@@ -15,4 +15,8 @@ $ bin/envoy
 
 note: make will also place a copy of the binary in the first part of your $GOPATH
 
+After that, you can run the demo middlewares by executing the following command:
+```
+$ envoy start --conf-dir=examples
+```
 
