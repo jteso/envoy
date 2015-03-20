@@ -183,7 +183,7 @@ func (ctx FlowContextImpl) GetValue(key string) string {
 	if funcr, ok := flowCtxResolvers[key]; ok {
 		return funcr(&ctx, "")
 	}
-	// Drop off last part of the key, in case it contains a non-static value
+	// Drop off last part of the key, in case it contains a non-www value
 	subkey, param := splitKeyParam(key)
 
 	if funcr, ok := flowCtxResolvers[subkey]; ok {

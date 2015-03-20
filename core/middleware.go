@@ -113,7 +113,7 @@ func (m BaseMiddleware) GetValue(key string) string {
 	if funcr, ok := MiddlewareCtxResolvers[key]; ok {
 		return funcr(&m, "")
 	}
-	// Drop off last part of the key, in case it contains a non-static value
+	// Drop off last part of the key, in case it contains a non-www value
 	subkey, param := splitKeyParam(key)
 
 	if funcr, ok := MiddlewareCtxResolvers[subkey]; ok {
