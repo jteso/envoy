@@ -12,6 +12,7 @@ func main() {
 	os.Exit(execute())
 }
 
+
 func execute() int {
 	app := cli.NewApp()
 	app.Name = "Envoy"

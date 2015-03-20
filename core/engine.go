@@ -102,7 +102,7 @@ func (e Engine) GetValue(key string) string {
 	if funcr, ok := EngineResolvers[key]; ok {
 		return funcr(&e, "")
 	}
-	// Drop off last part of the key, in case it contains a non-static value
+	// Drop off last part of the key, in case it contains a non-www value
 	subkey, param := splitKeyParam(key)
 
 	if funcr, ok := EngineResolvers[subkey]; ok {

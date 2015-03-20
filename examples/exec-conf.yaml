@@ -1,4 +1,5 @@
 # curl -i -X POST http://10.3.3.3:8080/payment
+# "([^\\s]+(\\.(?i)(ico|jpg|gif|bmp|png|css|js|html)$)",
 basedir: gateway
 policies:
   default_policy:
@@ -15,17 +16,12 @@ middlewares:
       - cors: {AllowedOrigins: ["*"]}
       - exec: {command: "examples/hooks/sayhi.sh"}
 
-  favicon:
-    pattern: "/favicon.ico"
+  web_server:
+    pattern: "/:file"
     method: GET
     policy:
-      - static: {}
-
-  static_files:
-    pattern: "/examples/static/"
-    method: GET
-    policy:
-      - static: {}
+      - static: {filter: "[^\\\\s]+(\\.)(?i)(ico|jpg|gif|bmp|png|css|js|html|md)$",
+                 location: "/opt/gopath/src/github.com/jteso/envoy/examples/www"}
 
   mock_services_preflight:
     pattern: "/Accounts/"
