@@ -15,4 +15,13 @@ $ bin/envoy
 
 note: make will also place a copy of the binary in the first part of your $GOPATH
 
+## Run the example
+```
+$ envoy start --conf-dir=examples
+```
+The internal api will be listening on port 9090. Only the following endpoint are available atm:
+- `http://10.5.5.5:9090/http/middlewares`
+- `http://10.5.5.5:9090/http/middlewares/{middleware_name}`
+
+
 
