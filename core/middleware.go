@@ -9,7 +9,7 @@ import (
 	"github.com/jteso/envoy/logutils"
 )
 
-type Middleware interface {
+type Proxy interface {
 	Expandable
 	Navigable
 	GetId() string
@@ -20,7 +20,7 @@ type Middleware interface {
 	RoundTrip(req FlowContext) (*http.Response, error)
 }
 
-type BaseMiddleware struct {
+type BaseProxy struct {
 	Id             string
 	Method         string
 	Enabled        bool
@@ -33,8 +33,8 @@ type BaseMiddleware struct {
 
 }
 
-func NewMiddleware(id, method, pattern string, enabled bool, policy *Policy, p Expandable) *BaseMiddleware {
-	return &BaseMiddleware{
+func NewProxy(id, method, pattern string, enabled bool, policy *Policy, p Expandable) *BaseProxy {
+	return &BaseProxy{
 		Id:             id,
 		Method:         method,
 		Pattern:        pattern,
@@ -46,34 +46,34 @@ func NewMiddleware(id, method, pattern string, enabled bool, policy *Policy, p E
 	}
 }
 
-func (b *BaseMiddleware) GetId() string {
+func (b *BaseProxy) GetId() string {
 	return b.Id
 }
 
-func (b *BaseMiddleware) GetMethod() string {
+func (b *BaseProxy) GetMethod() string {
 	return b.Method
 }
 
-func (b *BaseMiddleware) IsEnabled() bool {
+func (b *BaseProxy) IsEnabled() bool {
 	return b.Enabled
 }
-func (b *BaseMiddleware) GetAttachedPolicy() *Policy {
+func (b *BaseProxy) GetAttachedPolicy() *Policy {
 	return b.AttachedPolicy
 }
 
-func (b *BaseMiddleware) GetPattern() string {
+func (b *BaseProxy) GetPattern() string {
 	return b.Pattern
 }
 
-func (b *BaseMiddleware) GetParent() Expandable {
+func (b *BaseProxy) GetParent() Expandable {
 	return b.parent
 }
 
-func (b *BaseMiddleware) SetParent(e Expandable) {
+func (b *BaseProxy) SetParent(e Expandable) {
 	b.parent = e
 }
 
-func (mid *BaseMiddleware) RoundTrip(ctx FlowContext) (*http.Response, error) {
+func (mid *BaseProxy) RoundTrip(ctx FlowContext) (*http.Response, error) {
 	mws := mid.GetAttachedPolicy().ModuleChain.ModuleWrappers
 
 	var resp *http.Response
@@ -89,13 +89,13 @@ func (mid *BaseMiddleware) RoundTrip(ctx FlowContext) (*http.Response, error) {
 			return ctx.GetHttpResponse(), ctx.GetError()
 		}
 	}
-	logutils.FileLogger.Error(fmt.Sprintf("No policy attached to middleware: %s", mid.GetAttachedPolicy().Name))
+	logutils.FileLogger.Error(fmt.Sprintf("No policy attached to Proxy: %s", mid.GetAttachedPolicy().Name))
 	return nil, errors.FromStatus(http.StatusNoContent)
 
 }
 
 // Unwind pipeline from the `i` position downstream
-func (m *BaseMiddleware) unwind(pin int, ctx FlowContext) {
+func (m *BaseProxy) unwind(pin int, ctx FlowContext) {
 	mws := m.GetAttachedPolicy().ModuleChain.ModuleWrappers
 	for i := pin; i >= 0; i-- {
 		resp, err := mws[i].GetModule().ProcessResponse(ctx)
@@ -108,15 +108,15 @@ func (m *BaseMiddleware) unwind(pin int, ctx FlowContext) {
 	}
 }
 
-func (m BaseMiddleware) GetValue(key string) string {
+func (m BaseProxy) GetValue(key string) string {
 	// Lookup for whole key
-	if funcr, ok := MiddlewareCtxResolvers[key]; ok {
+	if funcr, ok := ProxyCtxResolvers[key]; ok {
 		return funcr(&m, "")
 	}
 	// Drop off last part of the key, in case it contains a non-www value
 	subkey, param := splitKeyParam(key)
 
-	if funcr, ok := MiddlewareCtxResolvers[subkey]; ok {
+	if funcr, ok := ProxyCtxResolvers[subkey]; ok {
 		return funcr(&m, param)
 	}
 

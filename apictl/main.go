@@ -25,13 +25,13 @@ func realMain() int {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:  "middleware",
-			Usage: "Operations with middlewares",
+			Name:  "proxy",
+			Usage: "Operations with proxies",
 			Subcommands: []cli.Command{
 				{
 					Name:   "ls",
-					Usage:  "List of all middlewares registered on the server",
-					Action: cmd.PrintMiddlewareNamesCmd,
+					Usage:  "List of all proxies registered on the server",
+					Action: cmd.PrintProxyNamesCmd,
 				},
 			},
 		},

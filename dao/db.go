@@ -14,7 +14,7 @@ import (
 var ErrAlreadyExists = errors.New("album already exists")
 
 // The DB interface defines methods to manipulate the albums.
-type MiddlewareDB interface {
+type ProxyDB interface {
 	AddInstance(instance *InstanceBase) int64
 
 	GetInstance(mid string, eid int64) (i *InstanceBase, err error, found bool)

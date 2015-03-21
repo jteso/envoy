@@ -14,7 +14,7 @@ var ErrNotFoundPID = errors.New("PID cannot be found")
 
 // Middleware Operations
 
-func PrintMiddlewareNamesCmd(c *cli.Context) {
+func PrintProxyNamesCmd(c *cli.Context) {
 	pid, err := findPID(c)
 	if err != nil {
 		log.Fatal(err)

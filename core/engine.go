@@ -116,24 +116,24 @@ func (e Engine) GetValue(key string) string {
 // API
 // *******************
 
-// Return the middleware and a bool indicating if it was found or not
-func (e Engine) GetMiddleware(mid string) (Middleware, bool) {
+// Return the Proxy and a bool indicating if it was found or not
+func (e Engine) GetProxy(mid string) (Proxy, bool) {
 	return e.HttpServer.Handler.(*Container).GetRouter().LookupById(mid)
 }
 
-func (e Engine) GetAllMiddlewareIds() []string {
+func (e Engine) GetAllProxies() []string {
 	return e.HttpServer.Handler.(*Container).GetRouter().GetAllIds()
 }
 
-//func (c *Container) AddMiddleware(p Middleware) {
+//func (c *Container) AddProxy(p Proxy) {
 //	c.GetRouter().Register(p.GetMethod(), p.GetPattern(), p)
 //}
 //
-//func (c *Container) RemoveMiddleware(p Middleware) {
+//func (c *Container) RemoveProxy(p Proxy) {
 //	c.GetRouter().Unregister(p.GetMethod(), p.GetPattern())
 //}
 //
-//func (c *Container) RestartMiddleware(p Middleware) {
+//func (c *Container) RestartProxy(p Proxy) {
 //	c.GetRouter().Unregister(p.GetMethod(), p.GetPattern())
 //	c.GetRouter().Register(p.GetMethod(), p.GetPattern(), p)
 //}

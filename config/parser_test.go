@@ -19,7 +19,7 @@ policies:
   otherone:
     - access: {allow: "192.168.1.0, :::1", deny: "*"}
 
-middlewares:
+proxies:
   old_dgw:
     pattern: "/v2"
     method: GET
@@ -56,9 +56,9 @@ func (s *ConfigSuite) TestHappyPath(c *C) {
 	c.Assert(len(policies["$default_policy"].items), Equals, 3)
 	c.Assert(len(policies["$otherone"].items), Equals, 1)
 
-	middlewares := config.Middlewares
-	c.Assert(len(middlewares), Equals, 2)
-	for _, m := range middlewares {
+	proxies := config.Proxies
+	c.Assert(len(proxies), Equals, 2)
+	for _, m := range proxies {
 		switch m.Id {
 		case "old_dgw":
 			c.Assert(m.Pattern, Equals, "/v2")

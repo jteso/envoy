@@ -17,7 +17,7 @@ import (
 type ApiConfig struct {
 	Basedir     string
 	Policies    map[string]*core.Policy
-	Middlewares []core.Middleware
+	Proxies []core.Proxy
 }
 
 func (ac ApiConfig) GetBaseDir() string {
@@ -27,8 +27,8 @@ func (ac ApiConfig) GetBaseDir() string {
 func (ac ApiConfig) GetPolicies() map[string]*core.Policy {
 	return ac.Policies
 }
-func (ac ApiConfig) GetMiddlewares() []core.Middleware {
-	return ac.Middlewares
+func (ac ApiConfig) GetProxies() []core.Proxy {
+	return ac.Proxies
 }
 
 func getKeySilently(key string) string {
@@ -58,19 +58,19 @@ func parsePolicies() map[string]*core.Policy {
 	return policymap
 }
 
-func parseMiddlewares() []core.Middleware {
-	lmiddlewares := make([]core.Middleware, 0)
+func parseProxies() []core.Proxy {
+	lProxies := make([]core.Proxy, 0)
 
-	middlewaresRaw, err := yaml.Get("middlewares")
+	ProxiesRaw, err := yaml.Get("proxies")
 	if err != nil {
-		panic("Error parsing middlewares")
+		panic("Error parsing Proxies")
 	}
 
-	for k, v := range middlewaresRaw.(map[interface{}]interface{}) {
-		m := parseMiddleware(k.(string), v)
-		lmiddlewares = append(lmiddlewares, m)
+	for k, v := range ProxiesRaw.(map[interface{}]interface{}) {
+		m := parseProxy(k.(string), v)
+		lProxies = append(lProxies, m)
 	}
-	return lmiddlewares
+	return lProxies
 }
 
 func createPolicy(policyName string, moduleChain []interface{}) *core.Policy {
@@ -101,7 +101,7 @@ func createModuleParams(m interface{}) map[string]interface{} {
 	return params
 }
 
-func parseMiddleware(midname string, v interface{}) core.Middleware {
+func parseProxy(midname string, v interface{}) core.Proxy {
 	var name, method, pattern string
 	var enabled bool
 	var policy *core.Policy
@@ -119,12 +119,12 @@ func parseMiddleware(midname string, v interface{}) core.Middleware {
 			policy = createPolicy(fmt.Sprint(name, "_policy"), v.([]interface{}))
 		}
 	}
-	return core.NewMiddleware(name, method, pattern, enabled, policy, nil)
+	return core.NewProxy(name, method, pattern, enabled, policy, nil)
 }
 
-// Expand the declared policy variables embeded into the middlewares
+// Expand the declared policy variables embeded into the Proxies
 func expandPolicies(apiConfig *ApiConfig) {
-	for _, mid := range apiConfig.Middlewares {
+	for _, mid := range apiConfig.Proxies {
 		var policyName string
 		for k, mw := range mid.GetAttachedPolicy().ModuleChain.ModuleWrappers {
 			if mw.IsReference() {
@@ -132,7 +132,7 @@ func expandPolicies(apiConfig *ApiConfig) {
 				pn := apiConfig.Policies[policyName]
 				if pn == nil {
 					logutils.Error(fmt.Sprintf("Policy not found: %s", policyName))
-					panic("Middleware cannot be installed as policy does not seem to exist")
+					panic("Proxy cannot be installed as policy does not seem to exist")
 				}
 				mid.GetAttachedPolicy().InsertPolicyModules(k, pn)
 			}
@@ -144,7 +144,7 @@ func parseConfig() (error, *ApiConfig) {
 	config := &ApiConfig{
 		Basedir:     parseBaseDir(),
 		Policies:    parsePolicies(),
-		Middlewares: parseMiddlewares(),
+		Proxies: 	 parseProxies(),
 	}
 	expandPolicies(config)
 	return nil, config

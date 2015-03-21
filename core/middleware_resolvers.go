@@ -2,22 +2,22 @@ package core
 
 import "strconv"
 
-var MiddlewareCtxResolvers = map[string]func(Middleware, string) string{
-	"middleware.id":          ResolveMiddlewareId,
-	"middleware.method":      ResolveMiddlewareMethod,
-	"middleware.policy.size": ResolveMiddlewarePolicySize,
-	//		"middleware.current.module.name": func,
-	//		"middleware.current.module.step": func,
+var ProxyCtxResolvers = map[string]func(Proxy, string) string{
+	"Proxy.id":          ResolveProxyId,
+	"Proxy.method":      ResolveProxyMethod,
+	"Proxy.policy.size": ResolveProxyPolicySize,
+	//		"Proxy.current.module.name": func,
+	//		"Proxy.current.module.step": func,
 }
 
-func ResolveMiddlewareId(m Middleware, param string) string {
+func ResolveProxyId(m Proxy, param string) string {
 	return m.GetId()
 }
 
-func ResolveMiddlewareMethod(m Middleware, param string) string {
+func ResolveProxyMethod(m Proxy, param string) string {
 	return m.GetMethod()
 }
 
-func ResolveMiddlewarePolicySize(m Middleware, param string) string {
+func ResolveProxyPolicySize(m Proxy, param string) string {
 	return strconv.Itoa(len(m.GetAttachedPolicy().ModuleChain.ModuleWrappers))
 }

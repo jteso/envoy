@@ -50,7 +50,7 @@ func (_ xmlEncoder) Encode(v ...interface{}) (string, error) {
 	if _, err := buf.Write([]byte(xml.Header)); err != nil {
 		return "", err
 	}
-	if _, err := buf.Write([]byte("<middlewares>")); err != nil {
+	if _, err := buf.Write([]byte("<proxies>")); err != nil {
 		return "", err
 	}
 	b, err := xml.Marshal(v)
@@ -60,7 +60,7 @@ func (_ xmlEncoder) Encode(v ...interface{}) (string, error) {
 	if _, err := buf.Write(b); err != nil {
 		return "", err
 	}
-	if _, err := buf.Write([]byte("</middlewares>")); err != nil {
+	if _, err := buf.Write([]byte("</proxies>")); err != nil {
 		return "", err
 	}
 	return buf.String(), nil

@@ -18,7 +18,7 @@ type RequestSuite struct {
 
 var _ = Suite(&RequestSuite{
 	MockFlowContext:      NewMockContext(),
-	MockFlowMultiContext: NewMockWithinMiddleware(),
+	MockFlowMultiContext: NewMockWithinProxy(),
 })
 
 func (s *RequestSuite) SetUpSuite(c *C) {
@@ -67,8 +67,8 @@ func (s *RequestSuite) TestVarsResolveOnLevelUp(c *C) {
 	header := s.MockFlowMultiContext.GetValue("message.req.header.user")
 	c.Assert(header, Equals, "jtedilla")
 
-	id := s.MockFlowMultiContext.GetValue("middleware.id")
-	method := s.MockFlowMultiContext.GetValue("middleware.method")
+	id := s.MockFlowMultiContext.GetValue("proxy.id")
+	method := s.MockFlowMultiContext.GetValue("proxy.method")
 
 	c.Assert(id, Equals, "id_1")
 	c.Assert(method, Equals, "POST")

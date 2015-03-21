@@ -55,8 +55,8 @@ func Run(ngn *core.Engine) {
 	// Setup routes
 	r := martini.NewRouter()
 
-	r.Get(`/http/middlewares`, GetAllMiddlewares)
-	r.Get(`/http/middlewares/:mid`, GetMiddleware)
+	r.Get(`/http/proxies`, 	  GetAllProxies)
+	r.Get(`/http/proxy/:mid`, GetProxy)
 	//r.Get(`/http/middleware/:mid/executions`, GetMiddlewareExecutions)
 	//r.Get(`/http/middleware/execution/:id`, GetMiddlewareExecution)
 

@@ -92,28 +92,28 @@ import (
 // Status to "405 Method Not Allowed".
 
 type Router struct {
-	middlewares map[string][]*routerEntry
+	proxies map[string][]*routerEntry
 	mutex       *sync.RWMutex
 }
 
 // New returns a new Router.
 func NewRouter() *Router {
 	return &Router{
-		middlewares: make(map[string][]*routerEntry),
+		proxies: make(map[string][]*routerEntry),
 		mutex:       new(sync.RWMutex),
 	}
 }
 
 // Lookup by id. Used for API purposes only
-func (r *Router) LookupById(id string) (m Middleware, found bool) {
+func (r *Router) LookupById(id string) (m Proxy, found bool) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
 	for _, m := range methods {
-		for _, re := range r.middlewares[m] {
-			if re.Middleware.GetId() == id {
-				return re.Middleware, true
+		for _, re := range r.proxies[m] {
+			if re.Proxy.GetId() == id {
+				return re.Proxy, true
 			}
 		}
 	}
@@ -128,41 +128,41 @@ func (r *Router) GetAllIds() []string {
 
 	methods := []string{"GET", "POST", "PUT", "DELETE"}
 	for _, m := range methods {
-		for _, re := range r.middlewares[m] {
-			collectIds = append(collectIds, re.Middleware.GetId())
+		for _, re := range r.proxies[m] {
+			collectIds = append(collectIds, re.Proxy.GetId())
 		}
 	}
 	return collectIds
 
 }
 
-// Lookup returns the middleware assigned to that method and path.
+// Lookup returns the proxy assigned to that method and path.
 // If not found it will return ok == nil
-func (r *Router) Lookup(method, path string) (Middleware, url.Values, bool) {
+func (r *Router) Lookup(method, path string) (Proxy, url.Values, bool) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	for _, re := range r.middlewares[method] {
+	for _, re := range r.proxies[method] {
 		if params, ok := re.try(path); ok {
-			return re.Middleware, params, ok
+			return re.Proxy, params, ok
 		}
 	}
 
 	return nil, nil, false
 }
 
-func (r *Router) Register(met, pat string, m Middleware) {
+func (r *Router) Register(met, pat string, m Proxy) {
 	r.Add(strings.ToUpper(met), pat, m)
 }
 
 func (r *Router) Unregister(met, pat string) {
-	if r.middlewares[met] != nil {
-		for i, re := range r.middlewares[met] {
+	if r.proxies[met] != nil {
+		for i, re := range r.proxies[met] {
 			if re.GetPath() == pat {
 				r.mutex.Lock()
 				defer r.mutex.Unlock()
 				//remove the element in the `i` position
-				r.middlewares[met] = append(r.middlewares[met][:i], r.middlewares[met][i+1:]...) // (1,2,...,i,...n)~>(1,2,..,i-1,i+1,...n)
+				r.proxies[met] = append(r.proxies[met][:i], r.proxies[met][i+1:]...) // (1,2,...,i,...n)~>(1,2,..,i-1,i+1,...n)
 			}
 		}
 	}
@@ -170,43 +170,43 @@ func (r *Router) Unregister(met, pat string) {
 }
 
 // Head will register a pattern with a handler for HEAD requests.
-func (r *Router) HEAD(pat string, m Middleware) {
+func (r *Router) HEAD(pat string, m Proxy) {
 	r.Add("HEAD", pat, m)
 }
 
 // Get will register a pattern with a handler for GET requests.
 // It also registers pat for HEAD requests. If this needs to be overridden, use
 // Head before Get with pat.
-func (r *Router) GET(pat string, m Middleware) {
+func (r *Router) GET(pat string, m Proxy) {
 	r.Add("HEAD", pat, m)
 	r.Add("GET", pat, m)
 }
 
 // Post will register a pattern with a handler for POST requests.
-func (r *Router) POST(pat string, m Middleware) {
+func (r *Router) POST(pat string, m Proxy) {
 	r.Add("POST", pat, m)
 }
 
 // Put will register a pattern with a handler for PUT requests.
-func (r *Router) PUT(pat string, m Middleware) {
+func (r *Router) PUT(pat string, m Proxy) {
 	r.Add("PUT", pat, m)
 }
 
 // Del will register a pattern with a handler for DELETE requests.
-func (r *Router) DELETE(pat string, m Middleware) {
+func (r *Router) DELETE(pat string, m Proxy) {
 	r.Add("DELETE", pat, m)
 }
 
 // Options will register a pattern with a handler for OPTIONS requests.
-func (r *Router) OPTIONS(pat string, m Middleware) {
+func (r *Router) OPTIONS(pat string, m Proxy) {
 	r.Add("OPTIONS", pat, m)
 }
 
 // Add will register a pattern with a handler for meth requests.
-func (r *Router) Add(meth, pat string, m Middleware) {
+func (r *Router) Add(meth, pat string, m Proxy) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
-	r.middlewares[meth] = append(r.middlewares[meth], &routerEntry{pat, m})
+	r.proxies[meth] = append(r.proxies[meth], &routerEntry{pat, m})
 }
 
 // Tail returns the trailing string in path after the final slash for a pat ending with a slash.
@@ -241,7 +241,7 @@ func Tail(pat, path string) string {
 
 type routerEntry struct {
 	pat        string
-	Middleware Middleware
+	Proxy Proxy
 }
 
 func (r *routerEntry) GetPath() string {

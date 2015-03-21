@@ -6,7 +6,7 @@ policies:
     - access: {allow: ["127.0.0.1", "10.5.5.1", "10.3.3.1"],
                deny: ["*"]}
 
-middlewares:
+proxies:
   api:
     pattern: "/Accounts/GetPortfolioSummary"
     method: GET

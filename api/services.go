@@ -9,18 +9,17 @@ import (
 	"github.com/jteso/envoy/core"
 )
 
-func GetAllMiddlewares(enc Encoder, api core.EnvoyAPI, parms martini.Params) (int, string) {
-	ids := api.GetAllMiddlewareIds()
+func GetAllProxies(enc Encoder, api core.EnvoyAPI, parms martini.Params) (int, string) {
+	ids := api.GetAllProxies()
 	return http.StatusOK, Must(enc.Encode(ids))
 }
 
-// Get(`/serviceNS/middlewares/:mid`,
-func GetMiddleware(enc Encoder, api core.EnvoyAPI, parms martini.Params) (int, string) {
+func GetProxy(enc Encoder, api core.EnvoyAPI, parms martini.Params) (int, string) {
 	mid := parms["mid"]
-	m, found := api.GetMiddleware(mid)
+	m, found := api.GetProxy(mid)
 	if found == false || m == nil {
 		return http.StatusNotFound, Must(enc.Encode(
-			NewError(ErrCodeNotExist, fmt.Sprintf("The middleware  with id %s does not exist", parms["mid"]))))
+			NewError(ErrCodeNotExist, fmt.Sprintf("The proxy  with id %s does not exist", parms["mid"]))))
 	}
 	return http.StatusOK, Must(enc.Encode(m))
 }

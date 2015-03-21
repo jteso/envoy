@@ -54,9 +54,9 @@ func NewContainer(configFiles []Config) (*Container, error) {
 		router:  NewRouter(),
 		logger:  logutils.FileLogger,
 	}
-	logutils.Info("Installing middlewares...")
+	logutils.Info("Installing proxies...")
 	for _, c := range configFiles {
-		cntnr.LoadMiddlewares(c.GetMiddlewares())
+		cntnr.LoadProxies(c.GetProxies())
 	}
 	return cntnr, nil
 }
@@ -72,20 +72,20 @@ func (p *Container) GetRouter() *Router {
 
 // Round trips the request to the selected proxy and writes back the response
 func (p *Container) proxyRequest(w http.ResponseWriter, r *http.Request) error {
-	// Lookup the middleware registered for the given pair: method, path.
+	// Lookup the Proxy registered for the given pair: method, path.
 	// FIXME: @javier - need to use the params variable as well
-	middleware, _, _ := p.GetRouter().Lookup(r.Method, r.URL.Path)
-	if middleware == nil {
+	proxy, _, _ := p.GetRouter().Lookup(r.Method, r.URL.Path)
+	if proxy == nil {
 		p.logger.Warn("Container failed to route: %s ", r.URL.Path)
 		return errors.FromStatus(http.StatusBadGateway)
 	}
 
 	// Create a unique request with sequential ids that will be passed to all interfaces.
 	fctx := NewFlowContext(r, w, atomic.AddInt64(&p.lastRequestId, 1), nil)
-	fctx.SetParent(middleware)
+	fctx.SetParent(proxy)
 
 	// The roundtrip thru the whole pipeline of modules
-	response, err := middleware.RoundTrip(fctx)
+	response, err := proxy.RoundTrip(fctx)
 
 	// Preparing the response back to the client if applicable
 	if response != nil {
@@ -105,23 +105,23 @@ func (p *Container) proxyRequest(w http.ResponseWriter, r *http.Request) error {
 
 // replyError is a helper function that takes error and replies with HTTP compatible error to the client.
 func (p *Container) replyError(err error, w http.ResponseWriter, req *http.Request) {
-	middlewareError := convertError(err)
-	statusCode, body, contentType := p.options.ErrorFormatter.Format(middlewareError)
+	proxyError := convertError(err)
+	statusCode, body, contentType := p.options.ErrorFormatter.Format(proxyError)
 
 	w.Header().Set("Content-Type", contentType)
 	w.WriteHeader(statusCode)
 	w.Write(body)
 }
 
-func (c *Container) AddMiddleware(p Middleware) {
+func (c *Container) AddProxy(p Proxy) {
 	c.GetRouter().Register(p.GetMethod(), p.GetPattern(), p)
 }
 
-func (c *Container) LoadMiddlewares(mds []Middleware) {
+func (c *Container) LoadProxies(mds []Proxy) {
 	for _, m := range mds {
-		logutils.Info(" ** Middleware: `%s` installed", m.GetId())
+		logutils.Info(" ** Proxy: `%s` installed", m.GetId())
 		m.SetParent(c)
-		c.AddMiddleware(m)
+		c.AddProxy(m)
 	}
 }
 
