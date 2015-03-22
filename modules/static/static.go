@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"fmt"
 	"github.com/jteso/envoy/core"
+	"github.com/jteso/envoy/errors"
 	"github.com/jteso/envoy/httputils"
+	"github.com/jteso/envoy/logutils"
 	"path"
 	"regexp"
-	"github.com/jteso/envoy/errors"
-	"fmt"
-	"github.com/jteso/envoy/logutils"
 	"strings"
 )
 
@@ -33,7 +33,7 @@ import (
 const indexPage = "index.html"
 
 type Static struct {
-	regex *regexp.Regexp
+	regex    *regexp.Regexp
 	location string
 }
 
@@ -43,15 +43,14 @@ func NewStatic(params core.ModuleParams) *Static {
 		panic(fmt.Sprintf("Error while parsing filter due to %s", err.Error()))
 	}
 	return &Static{
-		regex: r,
+		regex:    r,
 		location: params.GetString("location"),
 	}
 }
 
-
 func (static *Static) ProcessRequest(c core.FlowContext) (*http.Response, error) {
 	fileRequested := c.GetHttpRequest().URL.Path[1:]
-	if !static.regex.MatchString(fileRequested){
+	if !static.regex.MatchString(fileRequested) {
 		logutils.FileLogger.Debug("Resource: %s was rejected as it does not match the regex given", fileRequested)
 		return nil, errors.FromStatus(http.StatusNotFound)
 	}
@@ -63,7 +62,7 @@ func (static *Static) ProcessRequest(c core.FlowContext) (*http.Response, error)
 
 	// If index.html is requested, we will drop it to avoid a local redirect, which surely will confuse our router.
 	// Otherwise, lets carry on the full path to the file
-	if strings.HasSuffix(fileRequested, indexPage){
+	if strings.HasSuffix(fileRequested, indexPage) {
 		c.GetHttpRequest().URL.Path = c.GetHttpRequest().URL.Path[0:strings.LastIndex(c.GetHttpRequest().URL.Path, "/")]
 		resource = static.location
 	}

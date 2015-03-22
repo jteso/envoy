@@ -93,14 +93,14 @@ import (
 
 type Router struct {
 	proxies map[string][]*routerEntry
-	mutex       *sync.RWMutex
+	mutex   *sync.RWMutex
 }
 
 // New returns a new Router.
 func NewRouter() *Router {
 	return &Router{
 		proxies: make(map[string][]*routerEntry),
-		mutex:       new(sync.RWMutex),
+		mutex:   new(sync.RWMutex),
 	}
 }
 
@@ -240,7 +240,7 @@ func Tail(pat, path string) string {
 }
 
 type routerEntry struct {
-	pat        string
+	pat   string
 	Proxy Proxy
 }
 

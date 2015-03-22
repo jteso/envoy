@@ -15,9 +15,9 @@ import (
 //var log = logutils.New(logutils.ConsoleFilter)
 
 type ApiConfig struct {
-	Basedir     string
-	Policies    map[string]*core.Policy
-	Proxies []core.Proxy
+	Basedir  string
+	Policies map[string]*core.Policy
+	Proxies  []core.Proxy
 }
 
 func (ac ApiConfig) GetBaseDir() string {
@@ -142,9 +142,9 @@ func expandPolicies(apiConfig *ApiConfig) {
 
 func parseConfig() (error, *ApiConfig) {
 	config := &ApiConfig{
-		Basedir:     parseBaseDir(),
-		Policies:    parsePolicies(),
-		Proxies: 	 parseProxies(),
+		Basedir:  parseBaseDir(),
+		Policies: parsePolicies(),
+		Proxies:  parseProxies(),
 	}
 	expandPolicies(config)
 	return nil, config
