@@ -4,7 +4,7 @@ page_keywords: envoy, introduction, documentation, about, technology, understand
 
 # Overview
 
-`Envoy` aims to be the mysql of the api management tools. It aims to be a real (production-ready) open alternative to
+`Envoy` aims to be the "mysql" of the api management tools, i.e. a real (=production-ready) open alternative to
  commercial products like: apigee, mashery, layer7,...
 
 
