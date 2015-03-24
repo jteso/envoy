@@ -3,21 +3,24 @@ package core
 import "strconv"
 
 var ProxyCtxResolvers = map[string]func(Proxy, string) string{
-	"Proxy.id":          ResolveProxyId,
-	"Proxy.method":      ResolveProxyMethod,
-	"Proxy.policy.size": ResolveProxyPolicySize,
-	//		"Proxy.current.module.name": func,
-	//		"Proxy.current.module.step": func,
+	"proxy.id":          ResolveProxyId,
+	"proxy.method":      ResolveProxyMethod,
+	"proxy.policy.size": ResolveProxyPolicySize,
+	"proxy.pattern":     ResolveProxyPattern,
 }
 
-func ResolveProxyId(m Proxy, param string) string {
-	return m.GetId()
+func ResolveProxyId(p Proxy, param string) string {
+	return p.GetId()
 }
 
-func ResolveProxyMethod(m Proxy, param string) string {
-	return m.GetMethod()
+func ResolveProxyMethod(p Proxy, param string) string {
+	return p.GetMethod()
 }
 
-func ResolveProxyPolicySize(m Proxy, param string) string {
-	return strconv.Itoa(len(m.GetAttachedPolicy().ModuleChain.ModuleWrappers))
+func ResolveProxyPolicySize(p Proxy, param string) string {
+	return strconv.Itoa(len(p.GetAttachedPolicy().ModuleChain.ModuleWrappers))
+}
+
+func ResolveProxyPattern(p Proxy, param string) string {
+	return p.GetPattern()
 }

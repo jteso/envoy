@@ -14,4 +14,4 @@ proxies:
     policy:
       - $default_policy
       - cors: {AllowedOrigins: ["*"]}
-      - http_endpoint: {url: "http://10.3.3.3:8080"}
+      - http_router: {url: "http://10.3.3.3:8080"}

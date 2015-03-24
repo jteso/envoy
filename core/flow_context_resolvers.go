@@ -23,7 +23,6 @@ import (
 //	"message.req.version": Example,
 //	"message.req.messageid": Example,
 //
-//	"message.req.queryparam.?": Example,
 //	"message.req.queryparams.count": Example,
 //	"message.req.queryparams.names": Example,
 //	"message.req.querystring": Example,
@@ -33,15 +32,14 @@ import (
 //	"message.req.formparams.names": Example,
 //	"message.req.formstring": Example,
 //
-//	"message.resp.header.?": Example,
-//	"message.resp.headers.count": Example,
-//	"message.resp.headers.names": Example,
 
 var flowCtxResolvers = map[string]func(FlowContext, string) string{
-	"message.req.path":          GetPath,
-	"message.req.header.?":      GetHeader,
-	"message.req.headers.count": GetHeadersCount,
-	"message.req.headers.names": GetHeadersNames,
+	"request.path":             GetPath,
+	"request.header.?":         GetHeader,
+	"request.headers.count":    GetHeadersCount,
+	"request.headers.names":    GetHeadersNames,
+	"request.queryparam.?":     GetQueryParam,
+	"request.queryparam.count": GetQueryParamCount,
 }
 
 func GetPath(ctx FlowContext, param string) string {
@@ -62,4 +60,12 @@ func GetHeadersNames(ctx FlowContext, param string) string {
 		shead = append(shead, headname)
 	}
 	return strings.Join(shead, ",")
+}
+
+func GetQueryParam(ctx FlowContext, param string) string {
+	return ctx.GetHttpRequest().URL.Query().Get(param)
+}
+
+func GetQueryParamCount(ctx FlowContext, param string) string {
+	return strconv.Itoa(len(ctx.GetHttpRequest().URL.Query()))
 }

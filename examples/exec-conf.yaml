@@ -9,17 +9,16 @@ proxies:
     method: GET
     policy:
       - $default_policy
-      - log:  {upstream: ["HeaderNames=> ", "$message.req.headers.names", " || Origin=> ", "$message.req.header.Origin"],
+      - log:  {upstream: ["HeaderNames=> ", "$request.headers.names", " || Num Query Params=> ", "$request.queryparam.count"],
                downstream: ["response"] }
-      - cors: {AllowedOrigins: ["*"]}
       - exec: {command: "examples/hooks/sayhi.sh"}
 
-  web_server:
-    pattern: "/:file"
-    method: GET
-    policy:
-      - static: {filter: "[^\\\\s]+(\\.)(?i)(ico|jpg|gif|bmp|png|css|js|html|md)$",
-                 location: "/opt/gopath/src/github.com/jteso/envoy/examples/www"}
+#  web_server:
+#    pattern: "/:file"
+#    method: GET
+#    policy:
+#      - static: {filter: "[^\\\\s]+(\\.)(?i)(ico|jpg|gif|bmp|png|css|js|html|md)$",
+#                 location: "/opt/gopath/src/github.com/jteso/envoy/examples/www"}
 
   mock_services_preflight:
     pattern: "/Accounts/"

@@ -56,6 +56,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.box_url = "file:///Users/javi/.vagrant.d/boxes/precise64.box"
 
+  config.vm.network :forwarded_port, guest:8080, host:8080, auto_correct: true
+  config.vm.network :forwarded_port, guest:9000, host:9000, auto_correct: true
+
   config.vm.network "private_network", ip: "10.5.5.5"
   config.vm.synced_folder ".", "/opt/gopath/src/github.com/jteso/envoy"
 

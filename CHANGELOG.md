@@ -1,3 +1,12 @@
+## 0.1.1
+
+[ ] Finish will all resolvers for log module
+[ ] Fix the router to accomodate wildcards from the Static module
+[ ] Change proxy definition to support multi-verb inline
+[ ] Finish the javascript module support
+[ ] Documentation
+
+
 ## 0.1.0
 
 **FEATURES**
@@ -31,7 +40,7 @@ FEATURES
 [ ] GracelFul listeners
 [ ] Mutex Cleanup
 [ ] Improve module quality
-    [ ] http_endpoint with load balancer
+    [ ] http_rouer with routing policy and multi-member support.
     [ ] Access Entity policy
     [ ] Assign Message policy => Creates or modifies HTTP request / response messages
     [ ] Cache policies
