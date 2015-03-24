@@ -85,5 +85,5 @@ func copyRequest(req *http.Request, body httputils.MultiReader, endpointURL *url
 }
 
 func init() {
-	core.Register("http_endpoint", NewHttpEndpoint)
+	core.Register("http_router", NewHttpEndpoint)
 }

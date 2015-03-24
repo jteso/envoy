@@ -1,0 +1,49 @@
+site_name: envoy
+site_url: http://envoy.sh
+site_description: Documentation for envoy
+#site_favicon: img/favicon.png
+
+dev_addr: 'localhost:8080'
+
+repo_url: https://github.com/jteso/envoy
+
+docs_dir: sources
+
+include_search: true
+
+use_absolute_urls: true
+
+copyright: Copyright &copy; 2014, envoy, Inc.
+#google_analytics: ['TBD', 'expressen.io']
+
+theme: readthedocs   
+
+pages:
+
+# Documentation:
+- ['index.md']
+- ['overview.md','Overview']
+- ['whyenvoy.md','Why Envoy?']
+- ['installation.md', 'Installation']
+- ['gettingstarted.md','Getting Started']
+
+# Modules
+- ['modules/index.md', 'Modules', 'Intro']
+- ['modules/access.md', 'Modules', 'Access']
+- ['modules/basic_auth.md', 'Modules', 'Basic Auth']
+- ['modules/cors.md', 'Modules', 'CORS']
+- ['modules/exec.md', 'Modules', 'Exec']
+
+- ['modules/http_router.md', 'Modules', 'Http router']
+- ['modules/gzip.md', 'Modules', 'Gzip']
+- ['modules/spike_arrest.md', 'Modules', 'Spike Arrest']
+- ['modules/static.md', 'Modules', 'Static']
+
+# Releases
+- ['releases/release-notes.md', 'Release Notes']
+
+# Contribute:
+# - ['contributing/index.md', '**HIDDEN**']
+# - ['contributing/contributing.md', 'Contribute', 'Contributing']
+# - ['contributing/devenvironment.md', 'Contribute', 'Development environment']
+# - ['contributing/docs_style-guide.md', 'Contribute', 'Documentation style guide']
