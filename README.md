@@ -1,3 +1,5 @@
+LATEST DOCUMENTATION CAN BE FOUND [HERE](https://jteso.github.io/envoy/documentation/site/index.html)
+
 Note
 ===
 `Envoy` is under heavy active development at the moment. If you are not afraid of bumpy rides, please read on to learn how to get started.
