@@ -6,7 +6,7 @@ policies:
 proxies:
   payment_batch:
     pattern: "/payment"
-    method: GET
+    method: ["GET", "POST"]
     policy:
       - $default_policy
       - log:  {upstream: ["HeaderNames=> ", "$request.headers.names", " || Num Query Params=> ", "$request.queryparam.count"],
@@ -20,13 +20,6 @@ proxies:
 #      - static: {filter: "[^\\\\s]+(\\.)(?i)(ico|jpg|gif|bmp|png|css|js|html|md)$",
 #                 location: "/opt/gopath/src/github.com/jteso/envoy/examples/www"}
 
-  mock_services_preflight:
-    pattern: "/Accounts/"
-    method: OPTIONS
-    policy:
-      - cors: {AllowedOrigins: ["*"]}
-      - log: {upstream: ["Origin: ", "$message.req.header.Origin", ", Headers: ", "$message.req.headers.names"],
-              downstream: [""]}
 
   mock_services:
     pattern: "/Accounts/"

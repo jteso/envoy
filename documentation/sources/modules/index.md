@@ -21,6 +21,7 @@ Following are some of the modules that can be found:
 
 ## Extensions
 - [Static](static.md)
+- [Log](log.md)
 
 
 ## Enpoints

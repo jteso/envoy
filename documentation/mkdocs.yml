@@ -38,6 +38,7 @@ pages:
 - ['modules/gzip.md', 'Modules', 'Gzip']
 - ['modules/spike_arrest.md', 'Modules', 'Spike Arrest']
 - ['modules/static.md', 'Modules', 'Static']
+- ['modules/log.md', 'Modules', 'Log']
 
 # Releases
 - ['releases/release-notes.md', 'Release Notes']

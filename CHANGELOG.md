@@ -1,10 +1,14 @@
 ## 0.1.1
 
-[ ] Finish will all resolvers for log module
+**FEATURES**
+
+- New log module.
+- Support for multi-verb in proxy definition yaml file.
 [ ] Fix the router to accomodate wildcards from the Static module
-[ ] Change proxy definition to support multi-verb inline
 [ ] Finish the javascript module support
-[ ] Documentation
+[ ] Test
+[ ] Documentation Update
+[ ] `-k` flag to check sintax
 
 
 ## 0.1.0

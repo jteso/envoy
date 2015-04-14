@@ -10,6 +10,7 @@ import (
 	"github.com/jteso/envoy/core"
 	"github.com/jteso/envoy/logutils"
 	yaml "github.com/tsuru/config"
+	"reflect"
 )
 
 //var log = logutils.New(logutils.ConsoleFilter)
@@ -59,7 +60,7 @@ func parsePolicies() map[string]*core.Policy {
 }
 
 func parseProxies() []core.Proxy {
-	lProxies := make([]core.Proxy, 0)
+	lProxies := []core.Proxy{}
 
 	ProxiesRaw, err := yaml.Get("proxies")
 	if err != nil {
@@ -67,8 +68,8 @@ func parseProxies() []core.Proxy {
 	}
 
 	for k, v := range ProxiesRaw.(map[interface{}]interface{}) {
-		m := parseProxy(k.(string), v)
-		lProxies = append(lProxies, m)
+		p := parseProxy(k.(string), v)
+		lProxies = append(lProxies, p...)
 	}
 	return lProxies
 }
@@ -101,10 +102,13 @@ func createModuleParams(m interface{}) map[string]interface{} {
 	return params
 }
 
-func parseProxy(midname string, v interface{}) core.Proxy {
-	var name, method, pattern string
+func parseProxy(midname string, v interface{}) []core.Proxy {
+	proxies := []core.Proxy{}
+	var name, pattern string
+	var verbs []string
 	var enabled bool
 	var policy *core.Policy
+
 
 	name = midname
 	for k, v := range v.(map[interface{}]interface{}) {
@@ -112,14 +116,35 @@ func parseProxy(midname string, v interface{}) core.Proxy {
 		case "pattern":
 			pattern = v.(string)
 		case "method":
-			method = v.(string)
+			verbs = parseMethod(v)
 		case "enabled":
 			enabled = v.(bool)
 		case "policy":
 			policy = createPolicy(fmt.Sprint(name, "_policy"), v.([]interface{}))
 		}
 	}
-	return core.NewProxy(name, method, pattern, enabled, policy, nil)
+	for _,verb := range verbs{
+		proxies = append(proxies, core.NewProxy(name + "_" + verb, verb, pattern, enabled, policy, nil ))
+	}
+	return proxies
+}
+
+// Parse the method field and return an array of HTTP verbs
+func parseMethod(method interface{}) (ms []string){
+	verbs := []string{}
+	switch method.(type){
+	case string:
+		return append(verbs, method.(string))
+	case []interface{}:
+		for _,v := range method.([] interface {}){
+			verbs = append(verbs, v.(string))
+		}
+		return verbs
+	default:
+		logutils.FileLogger.Error("Error parsing the method: %+v due to unxpected type: %s", method, reflect.TypeOf(method))
+		panic("Error parsing the config file. Check your logs")
+	}
+
 }
 
 // Expand the declared policy variables embeded into the Proxies
