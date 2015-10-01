@@ -1,30 +1,30 @@
 /*
 * Invokes any http endpoint.
-* TODO - loadbalancing capabilities
+* TODO(javier): To add loadbalancing strategies
  */
 
 package mod_http_lb
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
-	. "github.com/kapalhq/envoy/context"
+	"github.com/kapalhq/envoy/context"
+	"github.com/kapalhq/envoy/httputils"
 	"github.com/kapalhq/envoy/logutils"
 	"github.com/kapalhq/envoy/modprobe"
 	"github.com/kapalhq/envoy/modules/params"
 )
 
 const (
-	ROUND_ROBIN_POLICY = "round_robin"
+	ROUND_ROBIN_STRATEGY = "round_robin"
 )
 
 func init() {
-	modprobe.Install("http_router", NewHttpRouter)
+	modprobe.Install("mod_http_lb", NewHttpLoadbalancer)
 }
 
-type HttpRouter struct {
+type HttpLoadbalancer struct {
 	strategy string
 	url      *url.URL
 }
@@ -33,9 +33,13 @@ type HttpRouter struct {
 // CONSTRUCTORS
 // ---
 
-func NewHttpRouter(params params.ModuleParams) *HttpRouter {
-	strategy := sanitizePolicy(params.GetStringOrDefault("strategy", ROUND_ROBIN_POLICY))
-	return mustParseUrl(params.GetString("url"))
+func NewHttpLoadbalancer(params params.ModuleParams) *HttpLoadbalancer {
+	strategyParsed := sanitizePolicy(params.GetStringOrDefault("strategy", ROUND_ROBIN_STRATEGY))
+	urlParsed := mustParseUrl(params.GetString("url"))
+	return &HttpLoadbalancer{
+		strategy: strategyParsed,
+		url:      urlParsed,
+	}
 }
 
 // ---
@@ -43,7 +47,7 @@ func NewHttpRouter(params params.ModuleParams) *HttpRouter {
 // ---
 func sanitizePolicy(strategy string) string {
 	switch strategy {
-	case ROUND_ROBIN_POLICY:
+	case ROUND_ROBIN_STRATEGY:
 		return strategy
 	default:
 		logutils.FileLogger.Debug("Policy:%s unknown", strategy)
@@ -51,18 +55,15 @@ func sanitizePolicy(strategy string) string {
 	}
 }
 
-func mustParseUrl(in string) *HttpRouter {
+func mustParseUrl(in string) *url.URL {
 	url, err := httputils.ParseUrl(in)
 	if err != nil {
 		panic(err)
 	}
-	return &HttpRouter{
-		url: url,
-		id:  fmt.Sprintf("%s://%s", url.Scheme, url.Host),
-	}
+	return url
 }
 
-func (a *HttpRouter) ProcessRequest(req ContextSpec) (*http.Response, error) {
+func (a *HttpLoadbalancer) ProcessRequest(req context.ContextSpec) (*http.Response, error) {
 	// None of the modules in the pipeline has intercepted the request, so lets hit the endpoint now!
 	// TODO: - Transport should be configurable via options
 	//       - HTTP Header to be added: `X-Forwarded-Host`
@@ -74,7 +75,7 @@ func (a *HttpRouter) ProcessRequest(req ContextSpec) (*http.Response, error) {
 	return http.DefaultTransport.RoundTrip(req.GetHttpRequest())
 }
 
-func (a *HttpRouter) ProcessResponse(c ContextSpec) (*http.Response, error) {
+func (a *HttpLoadbalancer) ProcessResponse(c context.ContextSpec) (*http.Response, error) {
 	return nil, nil
 }
 

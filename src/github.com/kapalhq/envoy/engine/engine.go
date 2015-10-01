@@ -2,10 +2,10 @@
 package engine
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -55,17 +55,14 @@ func New(httpAddr string) *Engine {
 	return e
 }
 func (e *Engine) StartHttp() error {
-	return e.Start(false, "", "")
+	return e.start(false, "", "")
 }
 
 // Run is a convenience function that runs Engine as an HTTP
 // server.
 func (e *Engine) start(ssl bool, certFile string, keyFile string) error {
 	go func() {
-		logutils.InfoBold("Server ready and listening on %s\n", e.HttpServer.Addr)
-		logutils.FileLogger.Info("Server ready and listening on %s", e.HttpServer.Addr)
-
-		//		e.EngineContext.SetValue(variables.HTTP_SERVER__UPTIME, DateTimeNow())
+		logutils.InfoBold("Server ready and listening on port%s", e.HttpServer.Addr)
 		if ssl {
 			e.errorC <- e.HttpServer.ListenAndServeTLS(certFile, keyFile)
 		} else {
@@ -83,9 +80,10 @@ func (e *Engine) start(ssl bool, certFile string, keyFile string) error {
 		case signal := <-e.sigC:
 			switch signal {
 			case syscall.SIGTERM, syscall.SIGINT:
-				fmt.Printf("\n==> Received signal: %s!, shutting down gracefully...\n", signal)
+				fmt.Printf("\n")
+				logutils.Info("Received signal: %s!, shutting down gracefully...", signal)
 				// put me a supevisor here
-				fmt.Printf("==> HttpServer is stopped\n")
+				logutils.InfoBold("Server stopped")
 				//cleanupDone <- true
 				return nil
 			case syscall.SIGUSR1:
@@ -97,19 +95,4 @@ func (e *Engine) start(ssl bool, certFile string, keyFile string) error {
 			logutils.Info("Internal HttpServer Error: %s", err)
 		}
 	}
-}
-
-func (e Engine) GetValue(key string) string {
-	// Lookup for whole key
-	if funcr, ok := EngineResolvers[key]; ok {
-		return funcr(&e, "")
-	}
-	// Drop off last part of the key, in case it contains a non-www value
-	subkey, param := splitKeyParam(key)
-
-	if funcr, ok := EngineResolvers[subkey]; ok {
-		return funcr(&e, param)
-	}
-
-	return ""
 }

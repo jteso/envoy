@@ -6,6 +6,7 @@ import (
 	"github.com/kapalhq/envoy/chain"
 	"github.com/kapalhq/envoy/context"
 	"github.com/kapalhq/envoy/logutils"
+	"github.com/kapalhq/envoy/modules"
 )
 
 type Proxy interface {
@@ -49,14 +50,27 @@ func (b *BaseProxy) GetMethod() string {
 func (b *BaseProxy) IsEnabled() bool {
 	return b.Enabled
 }
-func (b *BaseProxy) GetChain() chain.ChainSpec {
-	return b.Chain
-}
 
 func (b *BaseProxy) GetPattern() string {
 	return b.Pattern
 }
 
-func (mid *BaseProxy) RoundTrip(ctx context.ContextSpec) (*http.Response, error) {
+func (b *BaseProxy) GetChain() chain.ChainSpec {
+	return b.Chain
+}
+
+func (b *BaseProxy) GetCursor() int {
+	return b.GetChain().GetCursor()
+}
+
+func (b *BaseProxy) InsertModAt(priority int, mod modules.ModuleSpec) {
+	b.GetChain().InsertModule(priority, mod)
+}
+
+func (b *BaseProxy) AppendMod(mod modules.ModuleSpec) {
+	b.GetChain().AppendModule(mod)
+}
+
+func (mid *BaseProxy) ProcessChain(ctx context.ContextSpec) (*http.Response, error) {
 	return mid.GetChain().Process(ctx)
 }

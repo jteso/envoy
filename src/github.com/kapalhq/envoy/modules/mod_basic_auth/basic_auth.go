@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"strings"
 
-	. "github.com/kapalhq/envoy/context"
+	"github.com/kapalhq/envoy/context"
 	"github.com/kapalhq/envoy/errors"
 	"github.com/kapalhq/envoy/logutils"
 	"github.com/kapalhq/envoy/modprobe"
@@ -24,7 +24,7 @@ func init() {
 }
 
 type BasicAuth struct {
-	username strin
+	username string
 	password string
 }
 
@@ -73,6 +73,6 @@ func (ba *BasicAuth) ProcessRequest(c context.ContextSpec) (*http.Response, erro
 	return nil, nil // all good
 }
 
-func (ba *BasicAuth) ProcessResponse(c core.FlowContext) (*http.Response, error) {
+func (ba *BasicAuth) ProcessResponse(c context.ContextSpec) (*http.Response, error) {
 	return nil, nil
 }

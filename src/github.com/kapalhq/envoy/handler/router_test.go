@@ -1,72 +1,40 @@
-//// Copyright 2013 Julien Schmidt. All rights reserved.
-//// Use of this source code is governed by a BSD-style license that can be found
-//// in the LICENSE file.
-//
 package handler
 
-//
-//import (
-//	"testing"
-//
-//	. "gopkg.in/check.v1"
-//)
-//
-//func TestRequest(t *testing.T) { TestingT(t) }
-//
-//type RequestSuite struct {
-//	//	MockProxy proxy.Proxy
-//}
-//
-//var _ = Suite(&RequestSuite{
-////	MockProxy: proxy.Mock(),
-//})
-//
-//func (s *RequestSuite) TestRouter(c *C) {
-//	router := NewRouter()
-//
-//	router.GET("/batch/:name", s.MockProxy)
-//	_, params, found := router.Lookup("GET", "/batch/paymentBatch")
-//
-//	//	c.Assert(app.GetID(), Equals, s.MockProxy.GetID())
-//	c.Assert(found, Equals, true)
-//	c.Assert(params.Get(":name"), Equals, "paymentBatch")
-//}
-//
-//func (s *RequestSuite) TestRouterWithExtraSlashNotFound(c *C) {
-//	router := NewRouter()
-//
-//	router.GET("/batch/:name", s.MockProxy)
-//	app, _, found := router.Lookup("GET", "/batch/paymentBatch/")
-//
-//	c.Assert(app, IsNil)
-//	c.Assert(found, Equals, false)
-//
-//}
-//
-//func (s *RequestSuite) TestRouterWithPathSegmentParams(c *C) {
-//	router := NewRouter()
-//
-//	router.Register("GET", "/batch/:name/status", s.MockProxy)
-//	app, params, found := router.Lookup("GET", "/batch/paymentBatch/status")
-//
-//	c.Assert(app.GetID(), Equals, s.MockProxy.GetID())
-//	c.Assert(found, Equals, true)
-//	c.Assert(params.Get(":name"), Equals, "paymentBatch")
-//}
-//
-//func (s *RequestSuite) TestUnregisterProxy(c *C) {
-//	router := NewRouter()
-//
-//	router.Register("GET", "/batch/:name/status", s.MockProxy)
-//	app, params, found := router.Lookup("GET", "/batch/paymentBatch/status")
-//
-//	//	c.Assert(app.GetID(), Equals, s.MockProxy.GetID())
-//	c.Assert(found, Equals, true)
-//	c.Assert(params.Get(":name"), Equals, "paymentBatch")
-//
-//	router.Unregister("GET", "/batch/:name/status")
-//	app, _, found = router.Lookup("GET", "/batch/paymentBatch/status")
-//
-//	c.Assert(app, IsNil)
-//	c.Assert(found, Equals, false)
-//}
+import (
+	"testing"
+
+	"github.com/jteso/testify/assert"
+	"github.com/kapalhq/envoy/proxy"
+)
+
+func TestHappyRouter(t *testing.T) {
+	mockProxy := proxy.New("testProxy", "GET", "/batch/:name", true, nil)
+
+	router := NewRouter()
+	router.GET(mockProxy)
+	resultProxy, params, found := router.Lookup("GET", "/batch/paymentBatch")
+
+	assert.True(t, found)
+	assert.Equal(t, resultProxy.GetId(), mockProxy.GetId())
+	assert.Equal(t, params.Get(":name"), "paymentBatch")
+}
+
+func TestNoProxyFound(t *testing.T) {
+	mockProxy := proxy.New("testProxy", "GET", "/nonexistentroute", true, nil)
+
+	router := NewRouter()
+	router.GET(mockProxy)
+	_, _, found := router.Lookup("GET", "/batch/paymentBatch")
+
+	assert.False(t, found)
+}
+
+func TestWrongMethod(t *testing.T) {
+	mockProxy := proxy.New("testProxy", "GET", "/ping", true, nil)
+
+	router := NewRouter()
+	router.GET(mockProxy)
+	_, _, found := router.Lookup("POST", "/ping")
+
+	assert.False(t, found)
+}

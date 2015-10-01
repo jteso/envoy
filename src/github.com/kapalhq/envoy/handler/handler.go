@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"sync/atomic"
 
+	"github.com/kapalhq/envoy/context"
 	"github.com/kapalhq/envoy/errors"
 	"github.com/kapalhq/envoy/httputils"
 	"github.com/kapalhq/envoy/logutils"
+	"github.com/kapalhq/envoy/proxy"
 )
 
 type Options struct {
@@ -34,18 +36,18 @@ func New() *Handler {
 	}
 }
 
-func NewWithConfig(configFiles []Config) (*Handler, error) {
-	apiHandler := &Handler{
-		options: &Options{ErrorFormatter: &errors.JsonFormatter{}},
-		router:  NewRouter(),
-		logger:  logutils.FileLogger,
-	}
-	logutils.Info("Installing proxies...")
-	for _, c := range configFiles {
-		apiHandler.LoadProxies(c.GetProxies())
-	}
-	return apiHandler, nil
-}
+// func NewWithConfig(configFiles []Config) (*Handler, error) {
+// 	apiHandler := &Handler{
+// 		options: &Options{ErrorFormatter: &errors.JsonFormatter{}},
+// 		router:  NewRouter(),
+// 		logger:  logutils.FileLogger,
+// 	}
+// 	logutils.Info("Installing proxies...")
+// 	for _, c := range configFiles {
+// 		apiHandler.LoadProxies(c.GetProxies())
+// 	}
+// 	return apiHandler, nil
+// }
 
 // Accepts requests, send it through the pipeline and return the response to client.
 func (c *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -78,11 +80,10 @@ func (p *Handler) proxyRequest(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// Create a unique request with sequential ids that will be passed to all interfaces.
-	fctx := NewFlowContext(r, w, atomic.AddInt64(&p.lastRequestId, 1), nil)
-	fctx.SetParent(proxy)
+	fctx := context.NewFlowContext(r, w, atomic.AddInt64(&p.lastRequestId, 1), nil)
 
 	// The roundtrip thru the whole pipeline of modules
-	response, err := proxy.RoundTrip(fctx)
+	response, err := proxy.ProcessChain(fctx)
 
 	// Preparing the response back to the client if applicable
 	if response != nil {
@@ -110,14 +111,14 @@ func (p *Handler) replyError(err error, w http.ResponseWriter, req *http.Request
 	w.Write(body)
 }
 
-func (c *Handler) AddProxy(p Proxy) {
-	c.GetRouter().Register(p.GetMethod(), p.GetPattern(), p)
+func (c *Handler) AddProxy(p proxy.ApiProxySpec) {
+	c.GetRouter().Register(p)
 }
 
-func (c *Handler) LoadProxies(mds []Proxy) {
-	for _, m := range mds {
-		logutils.Info(" ** Proxy: `%s` installed", m.GetId())
-		c.AddProxy(m)
+func (c *Handler) LoadProxies(proxies []proxy.ApiProxySpec) {
+	for _, p := range proxies {
+		logutils.Info(" ** Proxy: `%s` installed", p.GetId())
+		c.AddProxy(p)
 	}
 }
 

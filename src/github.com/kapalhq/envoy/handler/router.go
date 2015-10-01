@@ -1,5 +1,5 @@
 // Package router implements a simple URL pattern muxer
-// Heavily influenced by: https://github.com/bmizerany/pat/blob/master/mux.go
+// Modified version from original: https://github.com/bmizerany/pat/blob/master/mux.go
 package handler
 
 import (
@@ -56,66 +56,31 @@ import (
 // the colon). If a capture name appears more than once, the additional values
 // are appended to the previous values (see
 // http://golang.org/pkg/net/url/#Values)
-//
-// A trivial example server is:
-//
-//	package main
-//
-//	import (
-//		"io"
-//		"net/http"
-//		"github.com/bmizerany/pat"
-//		"log"
-//	)
-//
-//	// hello world, the web server
-//	func HelloServer(w http.ResponseWriter, req *http.Request) {
-//		io.WriteString(w, "hello, "+req.URL.Query().Get(":name")+"!\n")
-//	}
-//
-//	func main() {
-//		m := pat.New()
-//		m.Get("/hello/:name", http.HandlerFunc(HelloServer))
-//
-//		// Register this pat with the default serve mux so that other packages
-//		// may also be exported. (i.e. /debug/pprof/*)
-//		http.Handle("/", m)
-//		err := http.ListenAndServe(":12345", nil)
-//		if err != nil {
-//			log.Fatal("ListenAndServe: ", err)
-//		}
-//	}
-//
-// When "Method Not Allowed":
-//
-// Pat knows what methods are allowed given a pattern and a URI. For
-// convenience, Router will add the Allow header for requests that
-// match a pattern for a method other than the method requested and set the
-// Status to "405 Method Not Allowed".
+
+var HTTP_METHODS = [...]string{"GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "CONNECT", "PATCH"}
 
 type Router struct {
-	proxies map[string][]*routerEntry
+	proxies map[string][]proxy.ApiProxySpec
 	mutex   *sync.RWMutex
 }
 
 // New returns a new Router.
 func NewRouter() *Router {
 	return &Router{
-		proxies: make(map[string][]*routerEntry),
+		proxies: make(map[string][]proxy.ApiProxySpec),
 		mutex:   new(sync.RWMutex),
 	}
 }
 
 // Lookup by id. Used for API purposes only
-func (r *Router) LookupById(id string) (m Proxy, found bool) {
+func (r *Router) LookupById(id string) (m proxy.ApiProxySpec, found bool) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "CONNECT", "PATCH"}
-	for _, m := range methods {
-		for _, re := range r.proxies[m] {
-			if re.Proxy.GetId() == id {
-				return re.Proxy, true
+	for _, m := range HTTP_METHODS {
+		for _, p := range r.proxies[m] {
+			if p.GetId() == id {
+				return p, true
 			}
 		}
 	}
@@ -128,10 +93,9 @@ func (r *Router) GetAllIds() []string {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "CONNECT", "PATCH"}
-	for _, m := range methods {
-		for _, re := range r.proxies[m] {
-			collectIds = append(collectIds, re.Proxy.GetId())
+	for _, m := range HTTP_METHODS {
+		for _, p := range r.proxies[m] {
+			collectIds = append(collectIds, p.GetId())
 		}
 	}
 	return collectIds
@@ -140,27 +104,28 @@ func (r *Router) GetAllIds() []string {
 
 // Lookup returns the proxy assigned to that method and path.
 // If not found it will return ok == nil
-func (r *Router) Lookup(method, path string) (Proxy, url.Values, bool) {
+func (r *Router) Lookup(method, path string) (proxy.ApiProxySpec, url.Values, bool) {
 	r.mutex.RLock()
 	defer r.mutex.RUnlock()
 
-	for _, re := range r.proxies[method] {
-		if params, ok := re.try(path); ok {
-			return re.Proxy, params, ok
+	for _, p := range r.proxies[method] {
+		if params, ok := try(p.GetPattern(), path); ok {
+			return p, params, ok
 		}
 	}
 
 	return nil, nil, false
 }
 
-func (r *Router) Register(met, pat string, m Proxy) {
-	r.Add(strings.ToUpper(met), pat, m)
+func (r *Router) Register(p proxy.ApiProxySpec) {
+	r.Add(strings.ToUpper(p.GetMethod()), p)
 }
 
-func (r *Router) Unregister(met, pat string) {
+func (r *Router) Unregister(unprox proxy.ApiProxySpec) {
+	met := unprox.GetMethod()
 	if r.proxies[met] != nil {
-		for i, re := range r.proxies[met] {
-			if re.GetPath() == pat {
+		for i, p := range r.proxies[met] {
+			if p.GetPattern() == unprox.GetPattern() {
 				r.mutex.Lock()
 				defer r.mutex.Unlock()
 				//remove the element in the `i` position
@@ -172,43 +137,43 @@ func (r *Router) Unregister(met, pat string) {
 }
 
 // Head will register a pattern with a handler for HEAD requests.
-func (r *Router) HEAD(pat string, m Proxy) {
-	r.Add("HEAD", pat, m)
+func (r *Router) HEAD(p proxy.ApiProxySpec) {
+	r.Add("HEAD", p)
 }
 
 // Get will register a pattern with a handler for GET requests.
 // It also registers pat for HEAD requests. If this needs to be overridden, use
 // Head before Get with pat.
-func (r *Router) GET(pat string, m Proxy) {
-	r.Add("HEAD", pat, m)
-	r.Add("GET", pat, m)
+func (r *Router) GET(p proxy.ApiProxySpec) {
+	r.Add("HEAD", p)
+	r.Add("GET", p)
 }
 
 // Post will register a pattern with a handler for POST requests.
-func (r *Router) POST(pat string, m Proxy) {
-	r.Add("POST", pat, m)
+func (r *Router) POST(p proxy.ApiProxySpec) {
+	r.Add("POST", p)
 }
 
 // Put will register a pattern with a handler for PUT requests.
-func (r *Router) PUT(pat string, m Proxy) {
-	r.Add("PUT", pat, m)
+func (r *Router) PUT(p proxy.ApiProxySpec) {
+	r.Add("PUT", p)
 }
 
 // Del will register a pattern with a handler for DELETE requests.
-func (r *Router) DELETE(pat string, m Proxy) {
-	r.Add("DELETE", pat, m)
+func (r *Router) DELETE(p proxy.ApiProxySpec) {
+	r.Add("DELETE", p)
 }
 
 // Options will register a pattern with a handler for OPTIONS requests.
-func (r *Router) OPTIONS(pat string, m Proxy) {
-	r.Add("OPTIONS", pat, m)
+func (r *Router) OPTIONS(p proxy.ApiProxySpec) {
+	r.Add("OPTIONS", p)
 }
 
 // Add will register a pattern with a handler for meth requests.
-func (r *Router) Add(meth, pat string, m Proxy) {
+func (r *Router) Add(met string, p proxy.ApiProxySpec) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
-	r.proxies[meth] = append(r.proxies[meth], &routerEntry{pat, m})
+	r.proxies[met] = append(r.proxies[met], p)
 }
 
 // Tail returns the trailing string in path after the final slash for a pat ending with a slash.
@@ -241,39 +206,30 @@ func Tail(pat, path string) string {
 	return ""
 }
 
-type routerEntry struct {
-	pat   string
-	Proxy proxy.ApiProxySpec
-}
-
-func (r *routerEntry) GetPath() string {
-	return r.pat
-}
-
-func (r *routerEntry) try(path string) (url.Values, bool) {
+func try(pattern string, path string) (url.Values, bool) {
 	m := make(url.Values)
 	var i, j int
-	for i < len(path) {
+	for i < len(pattern) {
 		switch {
-		case j >= len(r.pat):
-			if r.pat != "/" && len(r.pat) > 0 && r.pat[len(r.pat)-1] == '/' {
+		case j >= len(pattern):
+			if pattern != "/" && len(pattern) > 0 && pattern[len(pattern)-1] == '/' {
 				return m, true
 			}
 			return nil, false
-		case r.pat[j] == ':':
+		case pattern[j] == ':':
 			var name, val string
 			var nextc byte
-			name, nextc, j = match(r.pat, isAlnum, j+1)
+			name, nextc, j = match(pattern, isAlnum, j+1)
 			val, _, i = match(path, matchPart(nextc), i)
 			m.Add(":"+name, val)
-		case path[i] == r.pat[j]:
+		case path[i] == pattern[j]:
 			i++
 			j++
 		default:
 			return nil, false
 		}
 	}
-	if j != len(r.pat) {
+	if j != len(pattern) {
 		return nil, false
 	}
 	return m, true
