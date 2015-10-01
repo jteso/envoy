@@ -4,7 +4,7 @@
 
 - New log module.
 - Support for multi-verb in proxy definition yaml file.
-[ ] Fix the router to accomodate wildcards from the Static module
+[ ] http_router module - roundrobin routing strategy added.
 [ ] Finish the javascript module support
 [ ] Test
 [ ] Documentation Update

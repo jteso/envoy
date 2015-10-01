@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/codegangsta/cli"
 	"os"
 	"runtime"
+
+	"github.com/codegangsta/cli"
 )
 
 func main() {
@@ -15,8 +16,7 @@ func main() {
 func execute() int {
 	app := cli.NewApp()
 	app.Name = "Envoy"
-	app.Usage = "A Reverse Proxy on Steroids"
-	app.Author = "Javier Teso"
+	app.Usage = "API management made easy"
 	app.Version = Version
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -31,34 +31,34 @@ func execute() int {
 	app.Commands = []cli.Command{
 		{
 			Name: "start",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "conf-dir",
-					Value: ".",
-					Usage: "Overwrites the default configuration directory. Only `*-conf.yaml` files are been parsed. [Default: current directory]",
-					//EnvVar: "APID_CONF
-				},
-				cli.BoolFlag{
-					Name:  "with-ssl",
-					Usage: "Listen for only HTTPS connections. [Default: false]",
-					//EnvVar: "APID_CONF
-				},
-				cli.StringFlag{
-					Name:  "cert-file",
-					Usage: "Certificate used for SSL/TLS connections.",
-					//EnvVar: "APID_CONF
-				},
-				cli.StringFlag{
-					Name:  "key-file",
-					Usage: "Key for the certificate. Must be unencrypted.",
-					//EnvVar: "APID_CONF
-				},
-				cli.IntFlag{
-					Name:  "p,port",
-					Value: 8080,
-					Usage: "Set which port should Envoy listen to. [Default: 8080]",
-				},
-			},
+			// Flags: []cli.Flag{
+			// 	cli.StringFlag{
+			// 		Name:  "conf-dir",
+			// 		Value: ".",
+			// 		Usage: "Overwrites the default configuration directory. Only `*-conf.yaml` files are been parsed. [Default: current directory]",
+			// 		//EnvVar: "APID_CONF
+			// 	},
+			// 	cli.BoolFlag{
+			// 		Name:  "with-ssl",
+			// 		Usage: "Listen for only HTTPS connections. [Default: false]",
+			// 		//EnvVar: "APID_CONF
+			// 	},
+			// 	cli.StringFlag{
+			// 		Name:  "cert-file",
+			// 		Usage: "Certificate used for SSL/TLS connections.",
+			// 		//EnvVar: "APID_CONF
+			// 	},
+			// 	cli.StringFlag{
+			// 		Name:  "key-file",
+			// 		Usage: "Key for the certificate. Must be unencrypted.",
+			// 		//EnvVar: "APID_CONF
+			// 	},
+			// 	cli.IntFlag{
+			// 		Name:  "p,port",
+			// 		Value: 8080,
+			// 		Usage: "Set which port should Envoy listen to. [Default: 8080]",
+			// 	},
+			// },
 			Usage:  "start the container",
 			Action: CmdStart,
 		},

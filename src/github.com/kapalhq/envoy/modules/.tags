@@ -1,0 +1,151 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Access	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^type Access struct {$/;"	type	line:26
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func (a *Access) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:37
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func (a *Access) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:49
+NewAccess	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func NewAccess(params core.ModuleParams) *Access {$/;"	func	line:57
+NewAccess2	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func NewAccess2(params core.ModuleParams) *Access {$/;"	func	line:64
+build	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func build(allow []string, deny []string) *Access {$/;"	func	line:68
+getFallbackAccess	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func (a *Access) getFallbackAccess() string {$/;"	func	line:81
+isExplicitlyAllowed	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func (a *Access) isExplicitlyAllowed(ip string) bool {$/;"	func	line:91
+isExplicitlyDenied	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func (a *Access) isExplicitlyDenied(ip string) bool {$/;"	func	line:103
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access.go	/^func init() {$/;"	func	line:113
+testParams	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^var testParams = map[string]interface{}{$/;"	var	line:15
+TestAccess	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^func TestAccess(t *testing.T) { TestingT(t) }$/;"	func	line:21
+AccessSuite	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^type AccessSuite struct {$/;"	type	line:23
+_	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^var _ = Suite(&AccessSuite{$/;"	var	line:27
+TestHappyPath	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^func (s *AccessSuite) TestHappyPath(c *C) {$/;"	func	line:31
+TestNotAllowedIP	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/access/access_test.go	/^func (s *AccessSuite) TestNotAllowedIP(c *C) {$/;"	func	line:39
+Analytics	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/analytics/analytics.go	/^\/\/type Analytics struct {$/;"	type	line:3
+NewAnalytics	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/analytics/analytics.go	/^\/\/func NewAnalytics(params core.ModuleParams) *Analytics {$/;"	func	line:7
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/analytics/analytics.go	/^\/\/func (ba *Analytics) ProcessRequest(ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:13
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/analytics/analytics.go	/^\/\/func (ba *Analytics) ProcessResponse(ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:24
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/analytics/analytics.go	/^\/\/func init() {$/;"	func	line:46
+BasicAuth	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth.go	/^type BasicAuth struct {$/;"	type	line:21
+NewBasicAuth	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth.go	/^func NewBasicAuth(params core.ModuleParams) *BasicAuth {$/;"	func	line:26
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth.go	/^func (ba *BasicAuth) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:33
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth.go	/^func (ba *BasicAuth) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:71
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth.go	/^func init() {$/;"	func	line:75
+testParams	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^var testParams = map[string]interface{}{$/;"	var	line:15
+TestBasicAuth	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^func TestBasicAuth(t *testing.T) { TestingT(t) }$/;"	func	line:21
+BasicAuthSuite	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^type BasicAuthSuite struct {$/;"	type	line:23
+_	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^var _ = Suite(&BasicAuthSuite{$/;"	var	line:27
+TestHappyPath	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^func (s *BasicAuthSuite) TestHappyPath(c *C) {$/;"	func	line:31
+TestWrongCredentials	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^func (s *BasicAuthSuite) TestWrongCredentials(c *C) {$/;"	func	line:40
+TestIncorrectFormat	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/basic_auth/basic_auth_test.go	/^func (s *BasicAuthSuite) TestIncorrectFormat(c *C) {$/;"	func	line:49
+Cors	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^type Cors struct {$/;"	type	line:37
+NewCors	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func NewCors(params core.ModuleParams) *Cors {$/;"	func	line:63
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:79
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:87
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func init() {$/;"	func	line:115
+HandlePreflight	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) HandlePreflight(c core.FlowContext) (*http.Response, error) {$/;"	func	line:123
+HandleActualRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) HandleActualRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:165
+isOriginAllowed	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) isOriginAllowed(origin string) bool {$/;"	func	line:188
+isMethodAllowed	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) isMethodAllowed(method string) bool {$/;"	func	line:203
+areHeadersAllowed	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func (cors *Cors) areHeadersAllowed(requestedHeaders []string) bool {$/;"	func	line:224
+parseHeaderList	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func parseHeaderList(headerList string) (headers []string) {$/;"	func	line:243
+missingOriginError	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^var missingOriginError = &errors.HttpError{StatusCode: 400, Body: "Missing Origin"}$/;"	var	line:256
+createOriginNotAllowedError	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func createOriginNotAllowedError(originNotAllowed string) *errors.HttpError {$/;"	func	line:258
+createMethodNotAllowedError	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func createMethodNotAllowedError(methodNotAllowed string) *errors.HttpError {$/;"	func	line:264
+createHeathersNotAllowedError	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/cors/cors.go	/^func createHeathersNotAllowedError(heathersNotAllowed []string) *errors.HttpError {$/;"	func	line:270
+Exec	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^type Exec struct {$/;"	type	line:21
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^func (exec *Exec) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:25
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^func (exec *Exec) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:43
+NewExec	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^func NewExec(params core.ModuleParams) *Exec {$/;"	func	line:47
+exec_cmd	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^func exec_cmd(cmd string) ([]byte, error) {$/;"	func	line:53
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/exec/exec.go	/^func init() {$/;"	func	line:61
+FormInput	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/form_input/form_input.go	/^type FormInput struct {$/;"	type	line:19
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/form_input/form_input.go	/^func (ba *FormInput) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:22
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/form_input/form_input.go	/^func (ba *FormInput) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:39
+NewFormInput	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/form_input/form_input.go	/^func NewFormInput(params core.ModuleParams) *FormInput {$/;"	func	line:43
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/form_input/form_input.go	/^func init() {$/;"	func	line:47
+GZip	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^type GZip struct {$/;"	type	line:15
+NewGzip	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^func NewGzip(params core.ModuleParams) *GZip {$/;"	func	line:22
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^func (gzip *GZip) ProcessRequest(req core.FlowContext) (*http.Response, error) {$/;"	func	line:26
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^func (gzip *GZip) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:30
+b	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^		var b bytes.Buffer$/;"	var	line:37
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip.go	/^func init() {$/;"	func	line:53
+testParams	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^var testParams = map[string]interface{}{}$/;"	var	line:18
+TestGzip	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^func TestGzip(t *testing.T) { TestingT(t) }$/;"	func	line:21
+GzipSuite	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^type GzipSuite struct {$/;"	type	line:23
+_	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^var _ = Suite(&GzipSuite{$/;"	var	line:27
+TestHappyPath	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^func (s *GzipSuite) TestHappyPath(c *C) {$/;"	func	line:31
+reader	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/gzip/gzip_test.go	/^	var reader io.ReadCloser$/;"	var	line:42
+HttpRouter	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^type HttpRouter struct {$/;"	type	line:22
+NewHttpRouter	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func NewHttpRouter(params core.ModuleParams) *HttpRouter {$/;"	func	line:32
+sanitizePolicy	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func sanitizePolicy(policy string) string {$/;"	func	line:40
+mustParseUrl	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func mustParseUrl(in string) *HttpRouter {$/;"	func	line:50
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func (a *HttpRouter) ProcessRequest(req core.FlowContext) (*http.Response, error) {$/;"	func	line:61
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func (a *HttpRouter) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:73
+copyRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func copyRequest(req *http.Request, body httputils.MultiReader, endpointURL *url.URL) *http.Request {$/;"	func	line:78
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router/http_router.go	/^func init() {$/;"	func	line:103
+TestEndpoint	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router_test/test_endpoint.go	/^type TestEndpoint struct {$/;"	type	line:12
+NewTestEndpoint	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router_test/test_endpoint.go	/^func NewTestEndpoint(params core.ModuleParams) *TestEndpoint {$/;"	func	line:20
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router_test/test_endpoint.go	/^func (a *TestEndpoint) ProcessRequest(req core.FlowContext) (*http.Response, error) {$/;"	func	line:24
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router_test/test_endpoint.go	/^func (a *TestEndpoint) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:31
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/http_router_test/test_endpoint.go	/^func init() {$/;"	func	line:35
+loadPluginRuntime	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.go	/^func loadPluginRuntime(name string) *otto.Otto {$/;"	func	line:20
+checkRequestPlugin2	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.go	/^func checkRequestPlugin2(r *http.Request) string {$/;"	func	line:42
+checkRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.go	/^func checkRequest(r *http.Request) bool {$/;"	func	line:70
+main	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.go	/^func main() {$/;"	func	line:95
+checkRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.js	/^function checkRequest(r) {$/;"	function	line:1
+checkRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.js	/^function checkRequest(r) {$/;"	function	line:1
+OnRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.js	/^\/\/ function OnRequest(request) {$/;"	function	line:26
+OnResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin.js	/^\/\/ function OnResponse(request, attempt){$/;"	function	line:33
+checkRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin2.js	/^function checkRequest(r) {$/;"	function	line:1
+checkRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/js/plugin2.js	/^function checkRequest(r) {$/;"	function	line:1
+MsgLog	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^type MsgLog struct {$/;"	type	line:23
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func (msgLog *MsgLog) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:28
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func (msgLog *MsgLog) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:34
+NewLog	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func NewLog(params core.ModuleParams) *MsgLog {$/;"	func	line:39
+logMessage	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func logMessage(pattern []string, c core.FlowContext) {$/;"	func	line:46
+buffer	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^	var buffer bytes.Buffer$/;"	var	line:47
+isVariable	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func isVariable(part string) (vble string, ok bool) {$/;"	func	line:59
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/log/log.go	/^func init() {$/;"	func	line:66
+OAuth2	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^type OAuth2 struct {$/;"	type	line:26
+NewOAuth2	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func NewOAuth2(params core.ModuleParams) *OAuth2 {$/;"	func	line:30
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func (oa *OAuth2) ProcessRequest(ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:54
+isAuthorizationGrantPresent	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func isAuthorizationGrantPresent(r *http.Request) (bool, string) {$/;"	func	line:90
+handleOAuth2Callback	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func handleOAuth2Callback(oauthOptions *goauth2.Options, ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:99
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func (oa *OAuth2) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:126
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/oauth2.go	/^func init() {$/;"	func	line:130
+Google	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func Google(opt ...goauth2.Option) *goauth2.Options {$/;"	func	line:12
+Github	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func Github(opt ...goauth2.Option) *goauth2.Options {$/;"	func	line:20
+Facebook	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func Facebook(opt ...goauth2.Option) *goauth2.Options {$/;"	func	line:27
+LinkedIn	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func LinkedIn(opt ...goauth2.Option) *goauth2.Options {$/;"	func	line:34
+NewOAuth2Provider	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func NewOAuth2Provider(opts []goauth2.Option) *goauth2.Options {$/;"	func	line:41
+unmarshallToken	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func unmarshallToken(s *sessions.Session) (t *token) {$/;"	func	line:52
+tk	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^	var tk goauth2.Token$/;"	var	line:57
+Tokens	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^type Tokens interface {$/;"	type	line:63
+token	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^type token struct {$/;"	type	line:70
+Access	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func (t *token) Access() string {$/;"	func	line:75
+Refresh	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func (t *token) Refresh() string {$/;"	func	line:80
+Expired	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func (t *token) Expired() bool {$/;"	func	line:85
+ExpiryTime	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func (t *token) ExpiryTime() time.Time {$/;"	func	line:93
+String	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/oauth2/token.go	/^func (t *token) String() string {$/;"	func	line:98
+SpikeArrest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest.go	/^type SpikeArrest struct {$/;"	type	line:20
+NewSpikeArrest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest.go	/^func NewSpikeArrest(params core.ModuleParams) *SpikeArrest {$/;"	func	line:25
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest.go	/^func (sa *SpikeArrest) ProcessRequest(ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:36
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest.go	/^func (sa *SpikeArrest) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:43
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest.go	/^func init() {$/;"	func	line:48
+testParams	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^var testParams = map[string]interface{}{$/;"	var	line:15
+TestSpikeArrest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^func TestSpikeArrest(t *testing.T) { TestingT(t) }$/;"	func	line:20
+SpikeArrestSuite	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^type SpikeArrestSuite struct {$/;"	type	line:22
+_	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^var _ = Suite(&SpikeArrestSuite{$/;"	var	line:26
+TestHappyPath	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^func (s *SpikeArrestSuite) TestHappyPath(c *C) {$/;"	func	line:30
+TestArrestedTraffic	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/rate_limit/spike_arrest_test.go	/^func (s *SpikeArrestSuite) TestArrestedTraffic(c *C) {$/;"	func	line:49
+SessionModule	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/sessions/session.go	/^type SessionModule struct {$/;"	type	line:23
+NewSession	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/sessions/session.go	/^func NewSession(params core.ModuleParams) *SessionModule {$/;"	func	line:27
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/sessions/session.go	/^func (sm *SessionModule) ProcessRequest(ctx core.FlowContext) (*http.Response, error) {$/;"	func	line:40
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/sessions/session.go	/^func (sm *SessionModule) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:51
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/sessions/session.go	/^func init() {$/;"	func	line:63
+Static	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/static/static.go	/^type Static struct {$/;"	type	line:35
+NewStatic	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/static/static.go	/^func NewStatic(params core.ModuleParams) *Static {$/;"	func	line:40
+ProcessRequest	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/static/static.go	/^func (static *Static) ProcessRequest(c core.FlowContext) (*http.Response, error) {$/;"	func	line:51
+ProcessResponse	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/static/static.go	/^func (static *Static) ProcessResponse(c core.FlowContext) (*http.Response, error) {$/;"	func	line:79
+init	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/static/static.go	/^func init() {$/;"	func	line:83
+VERSION	/Users/javi/Dev/go/src/github.com/jteso/envoy/modules/version.go	/^var VERSION = 0.2$/;"	var	line:3
