@@ -39,6 +39,10 @@ func New(id, method, pattern string, enabled bool, chain chain.ChainSpec) *BaseP
 	}
 }
 
+func NewFromJson(configJson string) *BaseProxy {
+	return &BaseProxy{}
+}
+
 func (b *BaseProxy) GetId() string {
 	return b.Id
 }

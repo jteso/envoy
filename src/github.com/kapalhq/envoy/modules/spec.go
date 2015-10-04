@@ -8,7 +8,6 @@ import (
 
 // Middlewares are allowed to observe, modify and intercept http requests and responses
 type ModuleSpec interface {
-	GetId() string
 	// Called before the request is going to be proxied to the endpoint selected by the load balancer.
 	// If it returns an error, request will be treated as erorrneous (e.g. failover will be initated).
 	// If it returns a non nil response, proxy will return the response without proxying to the endpoint.

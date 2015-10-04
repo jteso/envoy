@@ -10,15 +10,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/kapalhq/envoy/config"
 	"github.com/kapalhq/envoy/handler"
 	"github.com/kapalhq/envoy/logutils"
+	"github.com/kapalhq/envoy/proxy"
 )
 
 // This is the main server - the main building block
-// - Container: where all the proxies are living, a container will route all the incoming requests to
-// individual proxies, which are user-defined as a pipeline and a endpoint
-// - Server: the server that runs the main container as a http handler
-// An Engine implements the `Expandable` interface
 type Engine struct {
 	HttpServer *http.Server
 	// Internal logger
@@ -27,7 +25,17 @@ type Engine struct {
 	sigC   chan os.Signal
 }
 
-// httpAddr string takes the same format as http.ListenAndServe.
+func NewWithConfig(httpAddr string, backend config.Backend) *Engine {
+	ngnConfigurable := New(httpAddr)
+	go func() {
+		errC := config.NotifyOnChange(backend, ngnConfigurable)
+		for err := range errC {
+			logutils.InfoBold("[ERROR] Lost connectivity with etcd. Envoy will not accept further changes on the config file until this problem is resolved: %s", err.Error())
+		}
+	}()
+	return ngnConfigurable
+}
+
 func New(httpAddr string) *Engine {
 	httpServer := &http.Server{
 		Addr:           httpAddr,
@@ -37,11 +45,6 @@ func New(httpAddr string) *Engine {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	// Populate engine context...
-	//	ctx.SetValue(variables.HTTP_SERVER__PORT, httpAddr)
-	//	ctx.SetValue(variables.HTTP_SERVER__READ_TIMEOUT, strconv.FormatFloat(httpServer.ReadTimeout.Seconds(), byte('f'), 0, 64))
-	//	ctx.SetValue(variables.HTTP_SERVER__WRITE_TIMEOUT, strconv.FormatFloat(httpServer.WriteTimeout.Seconds(), byte('f'), 0, 64))
-
 	e := &Engine{
 		HttpServer: httpServer,
 		logger:     logutils.FileLogger,
@@ -49,18 +52,16 @@ func New(httpAddr string) *Engine {
 		sigC:       make(chan os.Signal, 1),
 	}
 
-	// give the container a ref to the engine, in case it has to escalate variables that it is unable to resolve by itself
-	// httpContainer.SetParent(e)
-
 	return e
 }
+
 func (e *Engine) StartHttp() error {
-	return e.start(false, "", "")
+	return e.rawStart(false, "", "")
 }
 
 // Run is a convenience function that runs Engine as an HTTP
 // server.
-func (e *Engine) start(ssl bool, certFile string, keyFile string) error {
+func (e *Engine) rawStart(ssl bool, certFile string, keyFile string) error {
 	go func() {
 		logutils.InfoBold("Server ready and listening on port%s", e.HttpServer.Addr)
 		if ssl {
@@ -95,4 +96,8 @@ func (e *Engine) start(ssl bool, certFile string, keyFile string) error {
 			logutils.Info("Internal HttpServer Error: %s", err)
 		}
 	}
+}
+
+func (e *Engine) OnChangeProxy(target proxy.ApiProxySpec) {
+	logutils.Info("Engine received a OnChangeProxy event!!")
 }

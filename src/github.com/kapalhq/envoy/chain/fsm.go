@@ -26,12 +26,12 @@ func upstreamFn(chain ChainSpec, ctx context.ContextSpec) handleStateFn {
 		resp, err := mod.ProcessRequest(ctx)
 		chain.SetCursor(i)
 		if resp != nil {
-			log.Printf("Module: %s writing response ...", mods[i].GetId())
+			//log.Printf("Module: %s writing response ...", mods[i].GetId())
 			ctx.SetHttpResponse(resp)
 			return downstreamFn
 		}
 		if err != nil {
-			log.Printf("Module: %s found error ...", mods[i].GetId())
+			//log.Printf("Module: %s found error ...", mods[i].GetId())
 			ctx.SetError(err)
 			return errorFoundFn
 		}
@@ -47,7 +47,7 @@ func downstreamFn(chain ChainSpec, ctx context.ContextSpec) handleStateFn {
 	for i := pin; i >= 0; i-- {
 		resp, err := mods[i].ProcessResponse(ctx)
 		if resp != nil {
-			log.Printf("Module: %s writing response ...", mods[i].GetId())
+			//log.Printf("Module: %s writing response ...", mods[i].GetId())
 			ctx.SetHttpResponse(resp)
 		}
 		if err != nil {

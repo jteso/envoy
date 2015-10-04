@@ -2,6 +2,7 @@
 
 ## Directory-based project format:
 .idea/
+pkg/
 bin/
 server.log
 site/

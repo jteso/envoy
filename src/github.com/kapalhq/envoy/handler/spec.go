@@ -2,7 +2,7 @@ package handler
 
 import "net/http"
 
-type ContainerSpec interface {
+type HandlerSpec interface {
 	GetRouter() *Router
 	ServeHTTP(http.ResponseWriter, *http.Request)
 	GetLastRequestId() int64
